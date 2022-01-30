@@ -1,0 +1,11 @@
+#th,
+#td {
+    border: none;
+    border-left: 2px solid rgba(0, 0, 0, 0.267);
+    border-right: 2px solid rgba(0, 0, 0, 0.267);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.041);
+}
+
+#th {
+    border-top: 2px solid rgba(0, 0, 0, 0.267);
+}
