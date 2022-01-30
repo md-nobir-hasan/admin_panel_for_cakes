@@ -93,7 +93,7 @@ if(isset($_POST['button'])){
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login Page</title>
+	<title>Update password</title>
    <!--Made with love by Mutiullah Samim -->
    
 	<!--Bootsrap 4 CDN-->
