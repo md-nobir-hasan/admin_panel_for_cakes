@@ -10,8 +10,13 @@ $output .= " <div>
         <th id='th'>Cake Flavor Types</th>
         <th id='th'>Total Cost Per Pound</th>
         <th id='th'>Selling price Per Pound</th>
-        <th id='th'>Profit</th>
-        <th id='th'>loss</th>
+
+        <th id='th' class='sold_dis'>Total sold out with discount</th>
+        <th id='th'  class='sold_dis'>Total sold out without discount</th>
+
+        <th id='th'>Total profit</th>
+        <th id='th'> Total loss</th>
+
         
      </tr>
   </thead>";
@@ -22,6 +27,7 @@ $execute = mysqli_query($conn, $sql);
 if ($execute) {
 
    while ($row = mysqli_fetch_assoc($execute)) {
+      $cake_id = $row['cake_id'];
       $id = $row['cost_id'];
       $id = (string)$id;
       $ciphering = "AES-128-CTR";
@@ -65,6 +71,23 @@ if ($execute) {
 
                   <td id='td' align='center'  class='" . $encript_id . "'><del>" . $row['total_price']. "</del> <b>{$selling_price}</b></td>
 
+
+                  <td id='td' align='center'>
+                  <button class='btn_sold' type='button' id='{$cake_id}' value='{$row['sold_out_dis']}'> p(+,-)</button>
+                  <br>
+                  <span id='span_sold_di> 0 </span>
+                  <span id='sell_with_dis' > {$row['sold_out_dis']}p = {$row['sell_with_dis']} </span>
+                  </td>
+
+                  <td id='td' align='center'>
+                  <button class='btn_sold_prod' type=''button' id='{$cake_id}' value='{$row['sold_out']}'> p(+,-)</button>
+                  <br>
+                  <span id='span_soldd> 0 </span>
+                  <span id='span_sold>{$row['sold_out']}p = {$row['sell_without_dis']} </span>
+                  </td>
+
+                  
+
                   <td id='td' align='center'  class='" . $encript_id . "'>{$profit_p}% = {$profit} </td>
 
                   <td id='td' align='center' class='" . $encript_id . "'>{$loss_p}% = {$loss} </td>
@@ -92,3 +115,144 @@ if ($execute) {
    echo "Data base execute err";
 }
 ?>
+
+
+
+<script>
+   //calculation for discount
+ $(document).ready(function() {
+      $(".btn_sold").on("click", function() {
+         var cake_id = $(this).attr('id');
+         var num_sold_p = $(this).val();
+         // var sell_with_dis = $('.no==').attr('id');
+         // alert(cake_id);
+
+             localStorage.setItem("num_sold_p", num_sold_p);
+               var options = {
+                  ajaxPrefix: ''
+               };
+               new Dialogify('./php_controler/body_modal.php', options)
+                  .title("Edit Number of sold out product")
+                  .buttons([{
+                        text: "Cancle",
+                        type: Dialogify.BUTTON_DANGER,
+                        click: function(e) {
+                           this.close();
+                        }
+                     },
+                     {
+                        text: 'Edit',
+                        type: Dialogify.BUTTON_PRIMARY,
+                        click: function(e) {
+                           var num_product = $("#num_p").val();
+                              
+                           // var form_data = new FormData();
+                           // form_data.append('name', $('#cake_name').val());
+                           // form_data.append('total_price', $('#total_price').val());
+                           // form_data.append('discount', discount_v);
+                           // form_data.append('id', data[0].cake_id);
+                           // alert(JSON.stringify(form_data));
+                           $.ajax({
+                              method: "POST",
+                              url: './php_controler/edit.php',
+                              data: {
+                                 num_product : num_product,
+                                 cake_id : cake_id
+                                   },
+                              // dataType:'json',
+                              // contentType: false,
+                              // cache: false,
+                              // processData: false,
+                              success: function(value) {
+                                 alert(value);
+                                 $.ajax({
+                                    cache: false,
+                                    url: "./php_controler/shows.php",
+                                    method: "POST",
+                                    success: function(data) {
+                                       $("#show_data").html(data);
+                                    }
+                                 });
+
+                              }
+                           });
+                        
+                        }
+                     }
+                  ]).showModal();
+      });
+   });
+
+
+
+
+//
+//calculation without discount
+//
+
+
+   $(document).ready(function() {
+      $(".btn_sold_prod").on("click", function() {
+         var cake_id = $(this).attr('id');
+         var num_sold_pro_out_dis = $(this).val();
+         // var sell_with_dis = $('.no==').attr('id');
+         // alert(cake_id);
+
+             localStorage.setItem("num_sold_pro_out_dis", num_sold_pro_out_dis);
+               var options = {
+                  ajaxPrefix: ''
+               };
+               new Dialogify('./php_controler/body_modal_out_dis.php', options)
+                  .title("Edit Number of sold out product")
+                  .buttons([{
+                        text: "Cancle",
+                        type: Dialogify.BUTTON_DANGER,
+                        click: function(e) {
+                           this.close();
+                        }
+                     },
+                     {
+                        text: 'Edit',
+                        type: Dialogify.BUTTON_PRIMARY,
+                        click: function(e) {
+
+                           var num_p_out_dis = $("#num_p_out_dis").val();
+                              
+                           // var form_data = new FormData();
+                           // form_data.append('name', $('#cake_name').val());
+                           // form_data.append('total_price', $('#total_price').val());
+                           // form_data.append('discount', discount_v);
+                           // form_data.append('id', data[0].cake_id);
+                           // alert(JSON.stringify(form_data));
+                           $.ajax({
+                              method: "POST",
+                              url: './php_controler/edit.php',
+                              data: {
+                                 num_p_out_dis : num_p_out_dis,
+                                 cake_id : cake_id
+                                   },
+                              // dataType:'json',
+                              // contentType: false,
+                              // cache: false,
+                              // processData: false,
+                              success: function(value) {
+                                 alert(value);
+                                 $.ajax({
+                                    cache: false,
+                                    url: "./php_controler/shows.php",
+                                    method: "POST",
+                                    success: function(data) {
+                                       $("#show_data").html(data);
+                                    }
+                                 });
+
+                              }
+                           });
+                        
+                        }
+                     }
+                  ]).showModal();
+      });
+   });
+</script>
+

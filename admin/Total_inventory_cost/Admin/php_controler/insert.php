@@ -44,7 +44,8 @@
             if($rows){
                $cake_id = $rows['cake_id'];
                $m = $rm*$p;
-               $u = 450+($m*3);
+               $u = ($m*3);
+               $u = $u+450;
                $u = $u/100;
                $tas = $t+$s;
                $total_cost = $m + $u + $st + $tas;
