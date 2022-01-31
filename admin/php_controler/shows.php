@@ -36,26 +36,53 @@ if ($execute) {
       $encription_iv = "1988406007151846";
 
       $encript_id = openssl_encrypt($id, $ciphering, $encription_key, $option, $encription_iv);
-     $discount_p = $row['discount'];
 
-     $discount_p = substr($discount_p,0,-1);
-     $discount_int = (int)$discount_p;
+      $discount_p = $row['discount'];
 
-     $total_price = $row['total_price'];
-     $discount = ($total_price*$discount_int)/100;
-     $selling_price = $total_price - $discount;
-     $total_cost = $row['total_cost'];
+      $discount_p = substr($discount_p,0,-1);
+      $discount_int = (int)$discount_p;
+ 
+      $total_pr = $row['total_price'];
+      $discount = ($total_pr*$discount_int)/100;
+      $selling_price = $total_pr - $discount;
+
+      //
+      //calculation of profit and loss
+      //
+
+     $total_sold_price_dis = $row['sell_with_dis'];
+     $total_sold_price = $row['sell_without_dis'];
+    $total_sold_price = $total_sold_price +$total_sold_price_dis;
+
+
+     $num_sold_out_p_dis = $row['sold_out_dis'];
+      $num_sold_out_p = $row['sold_out'];
+       $p = $num_sold_out_p + $num_sold_out_p_dis; //p = total number of product that sold out
+       $rm = $row['material_cost'];  //raw material cost	
+       $t = $row['transportation_cost'];  //transportation cost
+       $u_p = $row['utility_cost'];  //utility cost
+       $s = $row['space_cost'];  //space cost
+       $st = $row['staff_cost'];  //staff cost 
+      	
+               $m = $rm*$p;
+               $u = ($m*3);
+               $u = $u+450;
+               $u = $u/100;
+               $tas = $t+$s;
+
+         $total_cost = $m + $u + $st + $tas;
+   //   $total_cost = $row['total_cost'];
 
 
      $profit=$loss=$profit_p=$loss_p=0;
 
-     if($selling_price>$total_cost){
-      $profit = $selling_price-$total_cost;
+     if($total_sold_price>$total_cost){
+      $profit = $total_sold_price-$total_cost;
       $profit_p =($profit*100)/$total_cost;
       $profit_p = round($profit_p,2);
      }else{
-        $loss = $total_cost -$selling_price;
-        $loss_p =($profit*100)/$total_cost;
+        $loss = $total_cost -$total_sold_price;
+        $loss_p =($loss*100)/$total_cost;
         $loss_p = round($profit_p,2);
      }
 
@@ -69,28 +96,28 @@ if ($execute) {
 
                   <td id='td'  align='center' class='" . $encript_id . "'>" . $row['total_cost'] . "  </td>
 
-                  <td id='td' align='center'  class='" . $encript_id . "'><del>" . $row['total_price']. "</del> <b>{$selling_price}</b></td>
+                  <td id='td' align='center'  class='" . $encript_id . "'><del>" . $row['total_price']. "</del> <b>{$selling_price} tk</b></td>
 
 
                   <td id='td' align='center'>
                   <button class='btn_sold' type='button' id='{$cake_id}' value='{$row['sold_out_dis']}'> p(+,-)</button>
                   <br>
                   <span id='span_sold_di> 0 </span>
-                  <span id='sell_with_dis' > {$row['sold_out_dis']}p = {$row['sell_with_dis']} </span>
+                  <span id='sell_with_dis' > {$row['sold_out_dis']}p = {$row['sell_with_dis']}tk </span>
                   </td>
 
                   <td id='td' align='center'>
                   <button class='btn_sold_prod' type=''button' id='{$cake_id}' value='{$row['sold_out']}'> p(+,-)</button>
                   <br>
                   <span id='span_soldd> 0 </span>
-                  <span id='span_sold>{$row['sold_out']}p = {$row['sell_without_dis']} </span>
+                  <span id='span_sold>{$row['sold_out']}p = {$row['sell_without_dis']}tk </span>
                   </td>
 
                   
 
-                  <td id='td' align='center'  class='" . $encript_id . "'>{$profit_p}% = {$profit} </td>
+                  <td id='td' align='center'  class='" . $encript_id . "'>{$profit_p}% = {$profit}tk </td>
 
-                  <td id='td' align='center' class='" . $encript_id . "'>{$loss_p}% = {$loss} </td>
+                  <td id='td' align='center' class='" . $encript_id . "'>{$loss_p}% = {$loss}tk </td>
                   </tr>
                   </tbody>
             ";
