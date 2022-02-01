@@ -1,17 +1,14 @@
-$(document).ready(
-    function() {
-        show_data();
-    }
-
-)
+$(document).ready(function() {
+    show_data();
+});
 
 function DataInsert() {
     var name = document.getElementById("name").value;
     var price = document.getElementById("price").value;
     var discount = document.getElementById("discount").value;
-    var pattern_dis = /(^[0-9]{1,2}%{1}$)/m;
+    var pattern_dis = /(^[0-9]{1,2}%{1}$)/m; //Regular expresion for discount validation.for this regex  only one or two number and one % can be inputed
 
-    if (name == "" & price == "" & discount == "") {
+    if ((name == "") & (price == "") & (discount == "")) {
         var emty_all = " fill up the form";
         document.getElementById("emptyAll").innerHTML = emty_all;
         document.getElementById("emptyAll").style.display = "block";
@@ -54,18 +51,15 @@ function DataInsert() {
         document.getElementById("show_div").style.display = "block";
         // document.getElementById("show_divt").style.display="block";
 
-
-
         $.ajax({
             method: "POST",
             url: "./php_controler/insert.php",
             data: {
                 name: name,
                 price: price,
-                discount: discount
+                discount: discount,
             },
             success: function(data) {
-
                 show_data();
 
                 if (data == 1) {
@@ -85,12 +79,8 @@ function DataInsert() {
                     document.getElementById("emptydetails").style.display = "none";
                     document.getElementById("msg").style.display = "none";
                 }
-
-
-
-            }
-        })
-
+            },
+        });
     }
 }
 
@@ -101,14 +91,6 @@ function show_data() {
         method: "POST",
         success: function(data) {
             $("#show_data").html(data);
-        }
+        },
     });
 }
-
-
-
-$(document).on("click", ".pagination_link", function() {
-    var page = $(this).attr("id");
-    //   alert(page);
-    pagination(page);
-})

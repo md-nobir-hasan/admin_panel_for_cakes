@@ -1,7 +1,12 @@
 <?php
+
+//this is log in page after login you can insert, update,delete and show your bussiness details
+
+
+//database connect
 include("./Module/DB_conn.php");
 
-
+//check the input value and it's validation
 function check($data){
  $data = htmlspecialchars($data);
  $data = stripslashes($data);
@@ -21,7 +26,9 @@ if(isset($_POST['btn'])){
 
     $user_name = check($_POST['username']);
     $passwordpp = check($_POST['password']);
-
+    
+    
+    //this query for matching user name and password with data base and these are inputed
     $sql = "SELECT * FROM `login`";
     $execute = mysqli_query($conn,$sql);
     if($execute){

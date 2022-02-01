@@ -1,5 +1,5 @@
 
-
+<!-- This modal body for product +,- without discount  -->
 <div>
     <form>
         <input id="num_p_out_dis" type="number" value="">
